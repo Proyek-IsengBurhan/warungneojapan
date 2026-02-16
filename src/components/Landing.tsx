@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type CSSProperties } from "react";
 
 import { MdClose } from "react-icons/md";
 
@@ -8,6 +8,10 @@ function Landing() {
   const [isTop, setIsTop] = useState(true);
   const lastScrollY = useRef(0);
   const [modalContent, setModalContent] = useState<string | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+
+  type BarStyle = CSSProperties & { "--bar-width": string };
   const weeklyData = [
     { day: "Sen", laki: 10, perempuan: 8 },
     { day: "Sel", laki: 15, perempuan: 12 },
@@ -27,6 +31,30 @@ function Landing() {
     } else {
       document.body.style.overflow = "auto";
     }
+  }, [modalContent]);
+
+  useEffect(() => {
+    if (!modalContent) return;
+
+    previouslyFocusedElementRef.current =
+      (document.activeElement as HTMLElement | null) ?? null;
+
+    const focusTimer = window.setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 0);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setModalContent(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
+      previouslyFocusedElementRef.current?.focus?.();
+    };
   }, [modalContent]);
 
   useEffect(() => {
@@ -70,7 +98,7 @@ function Landing() {
       <div className="w-[80px] h-[32px] bg-[#E4CDA4] rounded-[16px] font-bebas text-white font-medium items-center justify-center flex">
         Logo
       </div>
-      <h1 className="text-12px font-bebas text-[#f09f0a] font-medium text-center whitespace-nowrap">
+      <h1 className="text-[12px] font-bebas text-[#f09f0a] font-medium text-center whitespace-nowrap">
         Ready Stock pada Grand Opening | Minggu, 8 Juni 2025!
       </h1>
       <div className="w-[80px] h-[32px] bg-[#BC002D] rounded-[16px] font-bebas text-white font-medium items-center justify-center flex">
@@ -82,10 +110,10 @@ function Landing() {
   return (
     <div className="w-full h-[100vh] bg-gradient-to-b from-[#40573A] via-[#E4CDA4] to-white flex flex-col items-center">
       <div
-        className={`fixed z-1 w-full h-[64px] bg-[#40573A]/30 flex justify-center transition-all duration-300 translate-y-0 backdrop-blur-[5px] shadow-lg `}
+        className={`fixed z-10 w-full h-[64px] bg-[#40573A]/30 flex justify-center transition-all duration-300 translate-y-0 backdrop-blur-[5px] shadow-lg `}
       >
         <div className="w-full min-w-[320px] max-w-[1440px] h-full px-[32px] bg-transparent flex justify-between items-center overflow-hidden">
-          <div className="animate-marquee gap-4">
+          <div className="animate-marquee gap-4 hover:[animation-play-state:paused]">
             <div className="flex gap-4 items-center">{content}</div>
             <div className="flex gap-4 items-center">{content}</div>
             <div className="flex gap-4 items-center">{content}</div>
@@ -108,7 +136,7 @@ function Landing() {
                 </span>
               </h1>
               <h2 className="w-full font-anton text-2xl custom-outline max-[1024px]:text-center max-[1024px]:text-[20px]">
-                CHALLANGE FANS COBAIN MASAKANNYA NEOJAPAN
+                CHALLENGE FANS COBAIN MASAKANNYA NEOJAPAN
               </h2>
               <div className="w-full flex flex-row gap-2 max-[1024px]:justify-center max-[440px]:flex-col max-[440px]:items-center">
                 <a
@@ -123,14 +151,14 @@ function Landing() {
                   href="https://www.instagram.com/m_ds.unite_cafe"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-fit h-[40px] border-1 border-[#BC002D] text-[#BC002D] px-6 py-2 rounded-sm font-semibold shadow-md flex items-center hover:border-[1.5px] hover:shadow-lg transition"
+                  className="w-fit h-[40px] border border-[#BC002D] text-[#BC002D] px-6 py-2 rounded-sm font-semibold shadow-md flex items-center hover:border-[1.5px] hover:shadow-lg transition"
                 >
                   Info Lebih Lanjut
                 </a>
               </div>
             </div>
             <div className="w-full flex items-center justify-center">
-              <div className="relative w-100 aspect-video border-[#E4CDA4] bg-[#40573A] border-4 rounded-xl shadow-[0_0_0_4px_black] overflow-hidden">
+              <div className="relative w-full max-w-[640px] aspect-video border-[#E4CDA4] bg-[#40573A] border-4 rounded-xl shadow-[0_0_0_4px_black] overflow-hidden">
                 <div className="absolute -top-4 -right-4 w-24 h-24 border-[#E4CDA4] bg-[#40573A] border-4 rounded-full shadow-[0_0_0_4px_black] flex items-center justify-center text-2xl font-bebas text-white font-medium flex-col">
                   LOGO
                   <span>MD</span>
@@ -142,6 +170,7 @@ function Landing() {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
                 ></iframe>
               </div>
             </div>
@@ -161,6 +190,8 @@ function Landing() {
               src={images["Warung"]}
               alt="Deskripsi Gambar"
               className="w-full rounded-2xl"
+              decoding="async"
+              loading="eager"
             />
             <div
               className="absolute left-[15.6%] top-[8%] group cursor-pointer max-[440px]:left-[15%] max-[440px]:top-[26%]"
@@ -223,13 +254,28 @@ function Landing() {
               </div>
             </div>
             {(modalContent === "Logo1" || modalContent === "Logo2") && (
-              <div className="fixed inset-0 bg-black/30 py-2 backdrop-blur-[5px] bg-opacity-60 flex justify-center items-center z-50 overflow-y-auto">
-                <div className="relative flex flex-col gap-4 h-fit py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg">
+              <div
+                className="fixed inset-0 bg-black/30 py-2 backdrop-blur-[5px] bg-opacity-60 flex justify-center items-center z-50 overflow-y-auto"
+                onMouseDown={(e) => {
+                  if (e.target === e.currentTarget) setModalContent(null);
+                }}
+              >
+                <div
+                  className="relative flex flex-col gap-4 h-fit py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={
+                    modalContent === "Logo1"
+                      ? "WARUNG NEOJAPAN"
+                      : "Moire Co., Ltd."
+                  }
+                >
                   <div className="relative bg-white p-8 rounded-lg shadow-[0_8px_8px_1px_gray] max-w-[700px] w-full overflow-y-auto">
                     <button
                       onClick={() => setModalContent(null)}
                       className="absolute top-2 right-2 p-2 text-gray-600 cursor-pointer rounded-4xl hover:text-black transition hover:bg-gray-600/10"
                       aria-label="Tutup"
+                      ref={closeButtonRef}
                     >
                       <MdClose size={24} />
                     </button>
@@ -311,8 +357,26 @@ function Landing() {
               modalContent === "Owner" ||
               modalContent === "Customer" ||
               modalContent === "SnF") && (
-              <div className="fixed inset-0 bg-black/30 py-2 backdrop-blur-[5px] bg-opacity-60 flex justify-center z-50 overflow-y-auto">
-                <div className="relative flex flex-col gap-4 h-fit py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg">
+              <div
+                className="fixed inset-0 bg-black/30 py-2 backdrop-blur-[5px] bg-opacity-60 flex justify-center z-50 overflow-y-auto"
+                onMouseDown={(e) => {
+                  if (e.target === e.currentTarget) setModalContent(null);
+                }}
+              >
+                <div
+                  className="relative flex flex-col gap-4 h-fit py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={
+                    modalContent === "Merchandise"
+                      ? "NEOJAPAN's Merchandise"
+                      : modalContent === "Owner"
+                        ? "NEOJAPAN a.k.a Bang Dian (Owner)"
+                        : modalContent === "Customer"
+                          ? "Customer Statistics"
+                          : "Snack and Food"
+                  }
+                >
                   <div className="sticky top-0 z-10 flex items-center justify-between px-2 py-2 bg-[#E4CDA4]">
                     {modalContent === "Merchandise" && (
                       <>
@@ -346,6 +410,7 @@ function Landing() {
                       onClick={() => setModalContent(null)}
                       className="p-2 text-gray-600 cursor-pointer rounded-4xl hover:text-black transition hover:bg-gray-600/10"
                       aria-label="Tutup"
+                      ref={closeButtonRef}
                     >
                       <MdClose size={24} />
                     </button>
@@ -355,10 +420,10 @@ function Landing() {
                       <>
                         <div className="flex flex-row overflow-hidden px-4 gap-4 max-[440px]:flex-col max-[440px]:gap-0 items-center">
                           <div
-                            className={`z-1 w-full rounded-lg h-[40px] bg-[#40573A] flex justify-center transition-all duration-300 translate-y-0 backdrop-blur-[5px] shadow-lg overflow-hidden`}
+                            className={`z-[1] w-full rounded-lg h-[40px] bg-[#40573A] flex justify-center transition-all duration-300 translate-y-0 backdrop-blur-[5px] shadow-lg overflow-hidden`}
                           >
                             <div className="w-full min-w-[320px] max-w-[1440px] h-full bg-transparent flex justify-between items-center overflow-hidden">
-                              <div className="animate-marquee gap-4">
+                              <div className="animate-marquee gap-4 hover:[animation-play-state:paused]">
                                 <div className="flex gap-4 items-center">
                                   {content2}
                                 </div>
@@ -383,6 +448,8 @@ function Landing() {
                                   src={images["Baju1"]}
                                   alt="Deskripsi Gambar"
                                   className="w-full rounded-2xl shadow-[0_8px_8px_1px_gray]"
+                                  loading="lazy"
+                                  decoding="async"
                                 />
                               </div>
                             </div>
@@ -435,6 +502,8 @@ function Landing() {
                                   src={images["Mug"]}
                                   alt="Deskripsi Gambar"
                                   className="w-full rounded-2xl shadow-[0_8px_8px_1px_gray]"
+                                  loading="lazy"
+                                  decoding="async"
                                 />
                               </div>
                             </div>
@@ -484,9 +553,11 @@ function Landing() {
                             <div className="w-fit flex items-center justify-center max-[440px]:w-full ">
                               <div className="w-56 h-56 flex items-center justify-center ">
                                 <img
-                                  src="src/components/Baju1.png"
+                                  src={images["Baju2"]}
                                   alt="Deskripsi Gambar"
                                   className="w-full rounded-2xl shadow-[0_8px_8px_1px_gray]"
+                                  loading="lazy"
+                                  decoding="async"
                                 />
                               </div>
                             </div>
@@ -538,14 +609,16 @@ function Landing() {
 
                     {modalContent === "Owner" && (
                       <div className="flex flex-col max-[540px]:gap-8">
-                        <div className="w-full h-90 flex items-center">
-                          <div className="bg-[#E4CDA4] w-full shadow-[0_8px_8px_1px_gray] rounded-lg flex flex-row h-55 gap-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0">
+                        <div className="w-full flex items-center">
+                          <div className="bg-[#E4CDA4] w-full shadow-[0_8px_8px_1px_gray] rounded-lg flex flex-row gap-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0">
                             <div className="relative w-full flex items-center justify-center max-[440px]:w-full ">
                               <div className=" w-56 h-56 flex items-center justify-center ">
                                 <img
                                   src={images["Neo1"]}
                                   alt="Deskripsi Gambar"
                                   className="h-80 rounded-2xl "
+                                  loading="lazy"
+                                  decoding="async"
                                 />
                               </div>
                             </div>
@@ -599,8 +672,8 @@ function Landing() {
                             </div>
                           </div>
                         </div>
-                        <div className="w-full h-80 flex items-center">
-                          <div className="bg-[#E4CDA4] shadow-[0_8px_8px_1px_gray]  w-full rounded-lg flex flex-row h-50 gap-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0">
+                        <div className="w-full flex items-center">
+                          <div className="bg-[#E4CDA4] shadow-[0_8px_8px_1px_gray]  w-full rounded-lg flex flex-row gap-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0">
                             <div className="w-full h-fit max-[540px]:w-fit pl-8 ">
                               <div className="flex flex-row gap-1 items-center">
                                 <h3 className="text-lg font-bold mb-2">
@@ -626,7 +699,7 @@ function Landing() {
                                 </h3>
                               </div>
                               <h3 className="text-lg font-bold mb-2">
-                                SUBSCRIBE FOR BERAS !
+                                SUBSCRIBE FOR BERAS!
                               </h3>
                             </div>
                             <div className="w-full relative flex items-center justify-center max-[440px]:w-full ">
@@ -636,6 +709,8 @@ function Landing() {
                                     src={images["YTLogo"]}
                                     alt="Deskripsi Gambar"
                                     className="h-80 rounded-2xl "
+                                    loading="lazy"
+                                    decoding="async"
                                   />
                                 </a>
                               </div>
@@ -667,9 +742,11 @@ function Landing() {
                                   <div className="flex-1 h-4 bg-blue-200 rounded overflow-hidden relative">
                                     <div
                                       className="h-full bg-blue-600 rounded animate-bar"
-                                      style={{
-                                        ["--bar-width" as any]: `${lakiPercent}%`,
-                                      }}
+                                      style={
+                                        {
+                                          "--bar-width": `${lakiPercent}%`,
+                                        } as BarStyle
+                                      }
                                     ></div>
                                   </div>
                                   <span className="w-10 text-right text-sm text-blue-700">
@@ -682,9 +759,11 @@ function Landing() {
                                   <div className="flex-1 h-4 bg-pink-200 rounded overflow-hidden relative">
                                     <div
                                       className="h-full bg-pink-600 rounded animate-bar"
-                                      style={{
-                                        ["--bar-width" as any]: `${perempuanPercent}%`,
-                                      }}
+                                      style={
+                                        {
+                                          "--bar-width": `${perempuanPercent}%`,
+                                        } as BarStyle
+                                      }
                                     ></div>
                                   </div>
                                   <span className="w-10 text-right text-sm text-pink-700">
