@@ -6,7 +6,7 @@ import "./index.css";
 // const App = lazy(() => import("./App"));
 // const Layout = lazy(() => import("./Layout"));
 const Landing = lazy(() => import("./components/Landing"));
-const DashUser = lazy(() => import("./components/DashboardUser"));
+const AncientLanding = lazy(() => import("./components/AncientLanding"));
 
 // const Dashboard = lazy(() => import("./components/Dashboard"));
 
@@ -16,8 +16,8 @@ const router = createBrowserRouter([
     element: <Landing />,
   },
   {
-    path: "/warungneojapan/dashuser",
-    element: <DashUser />,
+    path: "/warungneojapan/ancient",
+    element: <AncientLanding />,
   },
   // {
   //  path: "/warungneojapan/dashadmin",
@@ -40,5 +40,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     >
       <RouterProvider router={router} />
     </Suspense>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
