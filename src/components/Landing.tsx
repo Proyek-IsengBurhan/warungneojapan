@@ -8,6 +8,7 @@ function Landing() {
   const [isTop, setIsTop] = useState(true);
   const lastScrollY = useRef(0);
   const [modalContent, setModalContent] = useState<string | null>(null);
+  const [isModalScrolled, setIsModalScrolled] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
 
@@ -31,6 +32,8 @@ function Landing() {
     } else {
       document.body.style.overflow = "auto";
     }
+
+    setIsModalScrolled(false);
   }, [modalContent]);
 
   useEffect(() => {
@@ -270,7 +273,7 @@ function Landing() {
                       : "Moire Co., Ltd."
                   }
                 >
-                  <div className="relative bg-white p-8 rounded-lg shadow-[0_8px_8px_1px_gray] w-full max-h-[calc(100vh-8rem)] overflow-y-auto">
+                  <div className="relative bg-white p-8 rounded-lg shadow-[0_8px_8px_1px_gray] w-full">
                     <button
                       onClick={() => setModalContent(null)}
                       className="absolute top-2 right-2 p-2 text-gray-600 cursor-pointer rounded-4xl hover:text-black transition hover:bg-gray-600/10"
@@ -359,12 +362,15 @@ function Landing() {
               modalContent === "SnF") && (
               <div
                 className="fixed inset-0 bg-black/30 backdrop-blur-[5px] bg-opacity-60 flex justify-center items-center z-50 overflow-y-auto p-4"
+                onScroll={(e) => {
+                  setIsModalScrolled(e.currentTarget.scrollTop > 0);
+                }}
                 onMouseDown={(e) => {
                   if (e.target === e.currentTarget) setModalContent(null);
                 }}
               >
                 <div
-                  className="relative flex flex-col gap-4 py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200 my-auto max-h-[calc(100vh-2rem)] overflow-hidden"
+                  className="relative flex flex-col gap-4 py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200 my-auto"
                   role="dialog"
                   aria-modal="true"
                   aria-label={
@@ -377,45 +383,49 @@ function Landing() {
                           : "Snack and Food"
                   }
                 >
-                  <div className="flex items-center justify-between px-2 py-2 bg-[#E4CDA4]">
+                  <div
+                    className={`sticky top-0 z-50 flex items-center justify-between px-4 py-2 bg-[#E4CDA4] ${
+                      isModalScrolled ? "shadow-[0_10px_10px_-10px_gray]" : ""
+                    }`}
+                  >
                     {modalContent === "Merchandise" && (
                       <>
-                        <h3 className="px-2 text-lg font-bold text-[#40573A]">
+                        <h3 className="pr-2 text-lg font-bold text-[#40573A]">
                           NEOJAPAN's Merchandise
                         </h3>
                       </>
                     )}
                     {modalContent === "Owner" && (
                       <>
-                        <h3 className="px-2 text-lg font-bold text-[#40573A]">
+                        <h3 className="pr-2 text-lg font-bold text-[#40573A]">
                           NEOJAPAN a.k.a Bang Dian (Owner)
                         </h3>
                       </>
                     )}
                     {modalContent === "Customer" && (
                       <>
-                        <h3 className="px-2 text-lg font-bold text-[#40573A]">
+                        <h3 className="pr-2 text-lg font-bold text-[#40573A]">
                           Customer Statistics
                         </h3>
                       </>
                     )}
                     {modalContent === "SnF" && (
                       <>
-                        <h3 className="px-2 text-lg font-bold text-[#40573A]">
+                        <h3 className="pr-2 text-lg font-bold text-[#40573A]">
                           Snack and Food
                         </h3>
                       </>
                     )}
                     <button
                       onClick={() => setModalContent(null)}
-                      className="p-2 text-gray-600 cursor-pointer rounded-4xl hover:text-black transition hover:bg-gray-600/10"
+                      className="h-10 w-10 grid place-items-center rounded-full border border-white/60 bg-white/20 backdrop-blur-sm text-[#40573A] hover:bg-white/35 active:scale-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
                       aria-label="Tutup"
                       ref={closeButtonRef}
                     >
                       <MdClose size={24} />
                     </button>
                   </div>
-                  <div className="relative bg-white p-4 rounded-lg shadow-[0_8px_8px_1px_gray] w-full flex-1 overflow-y-auto">
+                  <div className="relative bg-white p-4 rounded-lg shadow-[0_8px_8px_1px_gray] w-full">
                     {modalContent === "Merchandise" && (
                       <>
                         <div className="flex flex-row overflow-hidden px-4 gap-4 max-[440px]:flex-col max-[440px]:gap-0 items-center">
@@ -457,7 +467,7 @@ function Landing() {
                               <h3 className="text-lg font-bold mb-2">
                                 WARUNG NEOJAPAN's T-Shirt
                               </h3>
-                              <div className="w-full flex flex-row gap-2">
+                              <div className="w-full flex flex-row gap-2 flex-wrap max-[540px]:justify-center">
                                 {" "}
                                 <h3 className="text-[12px] font-bold mb-2 px-3 py-1 bg-gradient-to-r text-white from-[#BC002D] to-[#f09f0a] rounded-2xl max-[440px]:text-[8px] ">
                                   Eksklusif 2025
@@ -511,7 +521,7 @@ function Landing() {
                               <h3 className="text-lg font-bold mb-2">
                                 WARUNG NEOJAPAN's Mug
                               </h3>
-                              <div className="w-full flex flex-row gap-2">
+                              <div className="w-full flex flex-row gap-2 flex-wrap max-[540px]:justify-center">
                                 {" "}
                                 <h3 className="text-[12px] font-bold mb-2 px-3 py-1 bg-gradient-to-r text-white from-[#BC002D] to-[#f09f0a] rounded-2xl max-[440px]:text-[8px] ">
                                   Eksklusif 2025
@@ -565,7 +575,7 @@ function Landing() {
                               <h3 className="text-lg font-bold mb-2">
                                 WARUNG NEOJAPAN's T-Shirt
                               </h3>
-                              <div className="w-full flex flex-row gap-2">
+                              <div className="w-full flex flex-row gap-2 flex-wrap max-[540px]:justify-center">
                                 {" "}
                                 <h3 className="text-[12px] font-bold mb-2 px-3 py-1 bg-gradient-to-r text-white from-[#BC002D] to-[#f09f0a] rounded-2xl max-[440px]:text-[8px] ">
                                   Eksklusif 2025
@@ -608,25 +618,29 @@ function Landing() {
                     )}
 
                     {modalContent === "Owner" && (
-                      <div className="flex flex-col max-[540px]:gap-8">
-                        <div className="w-full flex items-center">
-                          <div className="bg-[#E4CDA4] w-full shadow-[0_8px_8px_1px_gray] rounded-lg flex flex-row gap-4 p-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0 max-[540px]:p-3 h-[220px] max-[540px]:h-auto">
+                      <div className="flex flex-col gap-24 max-[540px]:gap-8 py-12">
+                        <div className="w-full flex items-center ">
+                          <div className="bg-[#E4CDA4] w-full shadow-[0_8px_8px_1px_gray] rounded-lg flex flex-row gap-4 p-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-4 max-[540px]:p-6 h-[220px] max-[540px]:h-auto">
                             <div className="relative w-full flex items-center justify-center max-[440px]:w-full ">
-                              <div className="w-56 h-[220px] flex items-center justify-center">
+                              <div className="relative w-56 h-[220px] flex items-center justify-center max-[540px]:w-full max-[540px]:h-[240px]">
+                                <div
+                                  aria-hidden="true"
+                                  className="hidden max-[540px]:block absolute bottom-2 left-1/2 -translate-x-1/2 w-40 h-8 rounded-full bg-black/25 blur-md z-0 max-[540px]:w-32 max-[540px]:h-6 max-[540px]:bottom-1"
+                                />
                                 <img
                                   src={images["Neo1"]}
                                   alt="Deskripsi Gambar"
-                                  className="h-[320px] w-auto rounded-2xl"
+                                  className="relative z-0 h-[320px] w-auto rounded-2xl max-[540px]:h-[240px] max-[540px]:drop-shadow-[0_25px_35px_rgba(0,0,0,0.2)]"
                                   loading="lazy"
                                   decoding="async"
                                 />
                               </div>
                             </div>
-                            <div className="w-full max-[540px]:w-fit">
+                            <div className="w-full max-[540px]:w-full">
                               <h3 className="text-lg font-bold mb-2">
                                 Neo Japan
                               </h3>
-                              <div className="w-full flex flex-row gap-2 mb-2">
+                              <div className="w-full flex flex-row gap-2 mb-2 flex-wrap">
                                 <img
                                   src="https://flagcdn.com/w40/id.png"
                                   alt="Bendera Indonesia"
@@ -673,9 +687,9 @@ function Landing() {
                           </div>
                         </div>
                         <div className="w-full flex items-center">
-                          <div className="bg-[#E4CDA4] shadow-[0_8px_8px_1px_gray]  w-full rounded-lg flex flex-row gap-4 p-4 overflow-hidden max-[540px]:flex-col items-center justify-center max-[540px]:gap-0 max-[540px]:p-3">
-                            <div className="w-full h-fit max-[540px]:w-fit pl-8 ">
-                              <div className="flex flex-row gap-1 items-center">
+                          <div className="bg-[#E4CDA4] shadow-[0_8px_8px_1px_gray]  w-full rounded-lg flex flex-row gap-4 p-4 overflow-hidden max-[540px]:flex-col items-center justify-center max-[540px]:gap-4 max-[540px]:p-6">
+                            <div className="w-full h-fit max-[540px]:w-full pl-8 max-[540px]:pl-0">
+                              <div className="flex flex-row gap-1 items-center max-[540px]:justify-center">
                                 <h3 className="text-lg font-bold mb-2">
                                   Neo Japan
                                 </h3>{" "}
@@ -687,7 +701,7 @@ function Landing() {
                                   />
                                 </div>
                               </div>
-                              <div className="w-full flex flex-row gap-2">
+                              <div className="w-full flex flex-row gap-2 flex-wrap max-[540px]:justify-center">
                                 <h3 className="text-[12px] font-bold mb-2 px-3 py-1 bg-gradient-to-r text-white from-[#BC002D] to-[#f09f0a] rounded-2xl max-[440px]:text-[8px] ">
                                   Travelling
                                 </h3>
@@ -698,13 +712,16 @@ function Landing() {
                                   Surving
                                 </h3>
                               </div>
-                              <h3 className="text-lg font-bold mb-2">
+                              <h3 className="text-lg font-bold mb-2 max-[540px]:text-center">
                                 SUBSCRIBE FOR BERAS!
                               </h3>
                             </div>
-                            <div className="w-full relative flex items-center justify-center max-[440px]:w-full ">
-                              <div className="h-56 w-56 flex items-center justify-center overflow-hidden rounded-2xl">
-                                <a href="https://www.youtube.com/@NeoJapan">
+                            <div className="w-fit flex items-center justify-center max-[540px]:w-full">
+                              <div className="w-[260px] h-[140px] flex items-center justify-center overflow-hidden rounded-2xl max-[540px]:w-full max-[540px]:max-w-[240px] max-[540px]:h-[120px]">
+                                <a
+                                  href="https://www.youtube.com/@NeoJapan"
+                                  className="block w-full h-full"
+                                >
                                   <img
                                     src={images["YTLogo"]}
                                     alt="Deskripsi Gambar"
@@ -722,7 +739,7 @@ function Landing() {
 
                     {modalContent === "Customer" && (
                       <>
-                        <div className="flex flex-col gap-6 max-w-xl mx-auto p-4">
+                        <div className="flex flex-col gap-6 w-full p-2">
                           {weeklyData.map(({ day, laki, perempuan }) => {
                             const lakiPercent = (laki / maxTotal) * 100;
                             const perempuanPercent =
@@ -733,15 +750,15 @@ function Landing() {
                                 key={day}
                                 className="flex flex-col md:flex-row md:items-center gap-4 w-full"
                               >
-                                <div className="w-full md:w-[50px] font-semibold text-gray-700">
+                                <div className="w-full md:w-[56px] font-semibold text-[#40573A]">
                                   {day}
                                 </div>
 
                                 <div className="flex-1 flex items-center gap-3">
                                   {/* Laki-Laki */}
-                                  <div className="flex-1 h-4 bg-blue-200 rounded overflow-hidden relative">
+                                  <div className="flex-1 h-4 bg-[#40573A]/15 rounded-full overflow-hidden relative">
                                     <div
-                                      className="h-full bg-blue-600 rounded animate-bar"
+                                      className="h-full bg-[#40573A] rounded-full animate-bar"
                                       style={
                                         {
                                           "--bar-width": `${lakiPercent}%`,
@@ -749,16 +766,16 @@ function Landing() {
                                       }
                                     ></div>
                                   </div>
-                                  <span className="w-10 text-right text-sm text-blue-700">
+                                  <span className="w-10 text-right text-sm font-semibold text-[#40573A]">
                                     {laki}
                                   </span>
                                 </div>
 
                                 <div className="flex-1 flex items-center gap-3">
                                   {/* Perempuan */}
-                                  <div className="flex-1 h-4 bg-pink-200 rounded overflow-hidden relative">
+                                  <div className="flex-1 h-4 bg-[#BC002D]/15 rounded-full overflow-hidden relative">
                                     <div
-                                      className="h-full bg-pink-600 rounded animate-bar"
+                                      className="h-full bg-[#BC002D] rounded-full animate-bar"
                                       style={
                                         {
                                           "--bar-width": `${perempuanPercent}%`,
@@ -766,7 +783,7 @@ function Landing() {
                                       }
                                     ></div>
                                   </div>
-                                  <span className="w-10 text-right text-sm text-pink-700">
+                                  <span className="w-10 text-right text-sm font-semibold text-[#BC002D]">
                                     {perempuan}
                                   </span>
                                 </div>
