@@ -1,10 +1,10 @@
-import Warung from "/BismillahNeoJapan.png";
-import Baju1 from "/Baju1.png";
-import Baju2 from "/Baju2.png";
-import Mug from "/Gelas1.png";
-import Verif from "/check.png";
-import Neo1 from "/Neo1.png";
-import YTLogo from "/YTLogo.png";
+import Warung from "./components/BismillahNeoJapan.png";
+import Baju1 from "./components/Baju1.png";
+import Baju2 from "./components/Baju2.png";
+import Mug from "./components/Gelas1.png";
+import Verif from "./components/check.png";
+import Neo1 from "./components/Neo1.png";
+import YTLogo from "./components/YTLogo.png";
 
 export const images: { [key: string]: string } = {
   Warung: Warung,
