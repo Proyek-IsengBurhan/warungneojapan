@@ -255,13 +255,13 @@ function Landing() {
             </div>
             {(modalContent === "Logo1" || modalContent === "Logo2") && (
               <div
-                className="fixed inset-0 bg-black/30 py-2 backdrop-blur-[5px] bg-opacity-60 flex justify-center items-center z-50 overflow-y-auto"
+                className="fixed inset-0 bg-black/30 backdrop-blur-[5px] bg-opacity-60 flex justify-center items-center z-50 overflow-y-auto p-4"
                 onMouseDown={(e) => {
                   if (e.target === e.currentTarget) setModalContent(null);
                 }}
               >
                 <div
-                  className="relative flex flex-col gap-4 h-fit py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200"
+                  className="relative flex flex-col gap-4 h-fit py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200 my-auto"
                   role="dialog"
                   aria-modal="true"
                   aria-label={
@@ -270,7 +270,7 @@ function Landing() {
                       : "Moire Co., Ltd."
                   }
                 >
-                  <div className="relative bg-white p-8 rounded-lg shadow-[0_8px_8px_1px_gray] max-w-[700px] w-full overflow-y-auto">
+                  <div className="relative bg-white p-8 rounded-lg shadow-[0_8px_8px_1px_gray] w-full max-h-[calc(100vh-8rem)] overflow-y-auto">
                     <button
                       onClick={() => setModalContent(null)}
                       className="absolute top-2 right-2 p-2 text-gray-600 cursor-pointer rounded-4xl hover:text-black transition hover:bg-gray-600/10"
@@ -358,13 +358,13 @@ function Landing() {
               modalContent === "Customer" ||
               modalContent === "SnF") && (
               <div
-                className="fixed inset-0 bg-black/30 py-2 backdrop-blur-[5px] bg-opacity-60 flex justify-center z-50 overflow-y-auto"
+                className="fixed inset-0 bg-black/30 backdrop-blur-[5px] bg-opacity-60 flex justify-center items-center z-50 overflow-y-auto p-4"
                 onMouseDown={(e) => {
                   if (e.target === e.currentTarget) setModalContent(null);
                 }}
               >
                 <div
-                  className="relative flex flex-col gap-4 h-fit py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200"
+                  className="relative flex flex-col gap-4 py-4 px-4 max-w-[732px] bg-[#E4CDA4] w-full rounded-lg animate-in fade-in-0 zoom-in-95 duration-200 my-auto max-h-[calc(100vh-2rem)] overflow-hidden"
                   role="dialog"
                   aria-modal="true"
                   aria-label={
@@ -377,7 +377,7 @@ function Landing() {
                           : "Snack and Food"
                   }
                 >
-                  <div className="sticky top-0 z-10 flex items-center justify-between px-2 py-2 bg-[#E4CDA4]">
+                  <div className="flex items-center justify-between px-2 py-2 bg-[#E4CDA4]">
                     {modalContent === "Merchandise" && (
                       <>
                         <h3 className="px-2 text-lg font-bold text-[#40573A]">
@@ -415,7 +415,7 @@ function Landing() {
                       <MdClose size={24} />
                     </button>
                   </div>
-                  <div className="relative bg-white p-4 rounded-lg shadow-[0_8px_8px_1px_gray] max-w-[700px] w-full h-fit overflow-y-auto">
+                  <div className="relative bg-white p-4 rounded-lg shadow-[0_8px_8px_1px_gray] w-full flex-1 overflow-y-auto">
                     {modalContent === "Merchandise" && (
                       <>
                         <div className="flex flex-row overflow-hidden px-4 gap-4 max-[440px]:flex-col max-[440px]:gap-0 items-center">
@@ -612,11 +612,11 @@ function Landing() {
                         <div className="w-full flex items-center">
                           <div className="bg-[#E4CDA4] w-full shadow-[0_8px_8px_1px_gray] rounded-lg flex flex-row gap-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0">
                             <div className="relative w-full flex items-center justify-center max-[440px]:w-full ">
-                              <div className=" w-56 h-56 flex items-center justify-center ">
+                              <div className="w-56 h-56 flex items-center justify-center overflow-hidden rounded-2xl">
                                 <img
                                   src={images["Neo1"]}
                                   alt="Deskripsi Gambar"
-                                  className="h-80 rounded-2xl "
+                                  className="w-full h-full object-cover"
                                   loading="lazy"
                                   decoding="async"
                                 />
@@ -703,12 +703,12 @@ function Landing() {
                               </h3>
                             </div>
                             <div className="w-full relative flex items-center justify-center max-[440px]:w-full ">
-                              <div className=" h-56 flex items-center justify-center ">
+                              <div className="h-56 w-56 flex items-center justify-center overflow-hidden rounded-2xl">
                                 <a href="https://www.youtube.com/@NeoJapan">
                                   <img
                                     src={images["YTLogo"]}
                                     alt="Deskripsi Gambar"
-                                    className="h-80 rounded-2xl "
+                                    className="w-full h-full object-contain"
                                     loading="lazy"
                                     decoding="async"
                                   />
