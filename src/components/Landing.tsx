@@ -610,7 +610,7 @@ function Landing() {
                     {modalContent === "Owner" && (
                       <div className="flex flex-col max-[540px]:gap-8">
                         <div className="w-full flex items-center">
-                          <div className="bg-[#E4CDA4] w-full shadow-[0_8px_8px_1px_gray] rounded-lg flex flex-row gap-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0">
+                          <div className="bg-[#E4CDA4] w-full shadow-[0_8px_8px_1px_gray] rounded-lg flex flex-row gap-4 p-4 overflow-hidden max-[540px]:flex-col items-center justify-center max-[540px]:gap-0 max-[540px]:p-3">
                             <div className="relative w-full flex items-center justify-center max-[440px]:w-full ">
                               <div className="w-56 h-56 flex items-center justify-center overflow-hidden rounded-2xl">
                                 <img
@@ -673,7 +673,7 @@ function Landing() {
                           </div>
                         </div>
                         <div className="w-full flex items-center">
-                          <div className="bg-[#E4CDA4] shadow-[0_8px_8px_1px_gray]  w-full rounded-lg flex flex-row gap-4 max-[540px]:flex-col items-center justify-center max-[540px]:gap-0">
+                          <div className="bg-[#E4CDA4] shadow-[0_8px_8px_1px_gray]  w-full rounded-lg flex flex-row gap-4 p-4 overflow-hidden max-[540px]:flex-col items-center justify-center max-[540px]:gap-0 max-[540px]:p-3">
                             <div className="w-full h-fit max-[540px]:w-fit pl-8 ">
                               <div className="flex flex-row gap-1 items-center">
                                 <h3 className="text-lg font-bold mb-2">
