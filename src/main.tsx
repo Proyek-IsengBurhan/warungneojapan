@@ -10,24 +10,33 @@ const AncientLanding = lazy(() => import("./components/AncientLanding"));
 
 // const Dashboard = lazy(() => import("./components/Dashboard"));
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Landing />,
+    },
+    {
+      path: "/ancient",
+      element: <AncientLanding />,
+    },
+    {
+      path: "*",
+      element: <Landing />,
+    },
+    // {
+    //  path: "/dashadmin",
+    // element: <DashboardAdmin />,
+    // children: [
+    // { path: "landing", element: <Landing /> },
+    // { path: "dashboard", element: <Dashboard /> },
+    // ],
+    // },
+  ],
   {
-    path: "/warungneojapan/",
-    element: <Landing />,
+    basename: "/warungneojapan",
   },
-  {
-    path: "/warungneojapan/ancient",
-    element: <AncientLanding />,
-  },
-  // {
-  //  path: "/warungneojapan/dashadmin",
-  // element: <DashboardAdmin />,
-  // children: [
-  // { path: "landing", element: <Landing /> },
-  // { path: "dashboard", element: <Dashboard /> },
-  // ],
-  // },
-]);
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
